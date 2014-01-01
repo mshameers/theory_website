@@ -1,0 +1,62 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+ <div class="large-12 columns">
+    <br />
+    <br />
+    <table class="">
+      <thead>
+        <tr>
+          <th width="30">Sl No:</th>
+          <th width="180">Name</th>
+          <th width="50">Edition</th>
+          <th width="150">Category</th>
+          <th width="150">Author</th>
+          <th width="150">Publisher</th>
+          <th width="50">Price</th>
+          <th width="50">EndDate</th>
+          <th width="50">Edit</th>
+          <th width="50">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in pagination.items %}
+          <tr class="{{ loop.cycle('odd', 'even') }}">
+            <td>{{loop.index}}</td>
+            <td>{{book.title|e}}</td>
+            <td>{{book.edition|e}}</td>
+            {% for c in book.category %}
+                <td>{{c.name}} </td>
+            {% else %}
+            	<td>Not entered</td>
+            {% endfor %}
+            {% for c in book.author.all() %}
+                <td>{{c.name}} </td>
+            {% else %}
+            	<td>Not entered</td>
+            {% endfor %}
+            {% for c in book.publisher.all() %}
+                <td>{{c.name}} </td>
+            {% else %}
+            	<td>Not entered</td>
+            {% endfor %}
+            <td>{{book.price|e}}</td>
+            <td>{{book.endDate|date_pretty}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+<div class="large-12 columns">
+	<section id="pagination">
+	  {% if pagination.has_prev %}
+	    <a id="pagination-prev" href="{{ url_for('books', page=pagination.prev_num) }}">Previous</a>
+	  {% endif %}
+	  {% if pagination.has_next %}
+	    <a id="pagination-next" href="{{ url_for('books', page=pagination.next_num) }}">Next</a>
+	  {% endif %}
+	</section>
+</div>
+
+{% endblock %}

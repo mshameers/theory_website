@@ -1,0 +1,55 @@
+{% extends "main.html" %}
+{% block body %}
+
+{% from "_form_macro.html" import render_form, render_field_with_errors, render_field %}
+
+  <div class="row">
+    <header>CATEGORY</header>
+    <br />
+    <br />
+      <div class="large-12 columns">
+      	{% call render_form(action=url_for('category')) %}
+          {{ form.hidden_tag() }}
+            {# <input name=_csrf_token type=hidden value="{{ csrf_token() }}"> #}
+            <div class="large-4 columns">
+              {{ render_field_with_errors(form.name, class="small-3 columns") }}
+            </div>
+            <div class="large-4 columns">
+              {{ render_field_with_errors(form.shortName, class="small-3 columns", rows="6") }}
+            </div>
+            <div class="large-4 columns">
+              <br />
+              <input type="submit" value="Add New Category" />
+            </div>
+        {% endcall %}
+      </div>
+      <div class="large-12 columns">
+        <br />
+        <br />
+        <table class="">
+          <thead>
+            <tr>
+              <th width="50">Sl No:</th>
+              <th width="200">Name</th>
+              <th width="150">ShortName</th>
+              <th width="150">No of Books</th>
+              <th width="150">Edit</th>
+              <th width="150">Delete</ th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category in categories %}
+              <tr class="{{ loop.cycle('odd', 'even') }}">
+                <td>{{loop.index}}</td>
+                <td><a href="{{url_for('books', page=1, cat=category.id)}}">{{category.name|e}}</a></td>
+                <td>{{category.shortName|e}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+{% endblock %}
+{% block script %}
+{% endblock %}

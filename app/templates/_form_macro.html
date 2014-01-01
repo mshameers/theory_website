@@ -1,0 +1,40 @@
+{% macro render_form(caller) %}
+<form method="POST"{{ kwargs|xmlattr }}>
+  {{ caller() }}
+</form>
+{% endmacro %}
+
+{% macro render_field_with_errors(field) %}
+  <div class="control-group {% if field.errors %}error{% endif %}">
+    {% if field.type == 'BooleanField' %}
+      <div class="controls">
+        <label class="checkbox">
+          {{ field(**kwargs)|safe }}{{ field.label.text }}
+          {% for error in field.errors %}
+            <span class="help-inline">{{ error }}</span>
+          {% endfor %}
+        </label>
+      </div>
+    {% else %}
+      {{ field.label(class="control-label") }}
+      <div class="controls">
+        {{ field(**kwargs)|safe }}
+        {% for error in field.errors %}
+          <span class="help-inline">{{ error }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro render_field(field) %}
+  {% if field.type == 'HiddenField' %}
+    {{ field(**kwargs)|safe }}
+  {% else %}
+    <div class="control-group">
+      <div class="controls">
+        {{ field(**kwargs)|safe }}
+      </div>
+    </div>
+  {% endif %}
+{% endmacro %}

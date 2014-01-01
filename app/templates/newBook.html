@@ -1,0 +1,51 @@
+{% extends "main.html" %}
+{% block body %}
+
+{% from "_form_macro.html" import render_form, render_field_with_errors, render_field %}
+
+  <div class="row">
+    <header>ADD NEW BOOK</header>
+    <br />
+    <br />
+        {% call render_form(action=url_for('newBook')) %}
+          {{ form.hidden_tag() }}
+            {# <input name=_csrf_token type=hidden value="{{ csrf_token() }}"> #}
+          <div class="large-12 columns">
+            <div class="large-4 columns">
+              {{ render_field_with_errors(form.title, class="small-3 columns") }}
+            </div>
+            <div class="large-4 columns">
+              {{ render_field_with_errors(form.edition, class="small-3 columns") }}
+            </div>
+            <div class="large-4 columns">
+              {{ render_field_with_errors(form.price, class="small-3 columns") }}
+            </div>
+          </div>
+          <div class="large-12 columns">
+            <div class="large-4 columns">
+              {{ render_field_with_errors(form.category, class="large-8 columns") }}
+            </div>
+            <div class="large-4 columns">
+              {{ render_field_with_errors(form.author, class="large-8 columns") }}
+            </div>
+            <div class="large-4 columns">
+              {{ render_field_with_errors(form.publisher, class="large-8 columns") }}
+            </div>
+          </div>
+          <div class="large-12 columns">
+            <div class="small-3 small-centered columns">
+              <br />
+              <input type="submit" value="Add New Book" />
+            </div>
+          </div>
+        {% endcall %}
+      </div>
+  
+
+
+
+	
+</div>
+{% endblock %}
+{% block script %}
+{% endblock %}
