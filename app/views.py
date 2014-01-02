@@ -2,7 +2,7 @@ from flask import redirect, url_for, session, flash, render_template, request
 from models import Book, Category, Author, Publisher
 from app import app, db
 from forms import BookForm, CategoryForm, AuthorForm, PublisherForm
-
+from functools import wraps
 
 @app.errorhandler(403)
 def forbidden(e):
@@ -18,6 +18,38 @@ def not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500
 
+
+@app.route('/login/', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != app.config['USER']:
+            error = 'Invalid username'
+        elif request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            flash('You were logged in.')
+            return redirect(url_for('index'))
+        flash(error)
+    return render_template('login.html', error=error)
+
+@app.route('/logout/')
+def logout():
+    session.pop('logged_in', None)
+    flash('You were logged out.')
+    return redirect(url_for('index'))
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        logged = session.get('logged_in', None)
+        if not logged:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+    
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -39,7 +71,7 @@ def books(page, cat):
 	return render_template('books.html', pagination=pagination)
 
 @app.route('/book/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def newBook():
 	form = BookForm(formdata=request.form or None)
 	print form.category.data, form.publisher.data, form.author.data
@@ -50,7 +82,6 @@ def newBook():
 			author = Author.query.get(form.author.data)
 			number = len(category.books.all()) + 1
 			categoryShortName = category.shortName
-			print number, categoryShortName, '###number###', form.category.data
 			b = Book(number=number,
 					title=form.title.data,
 					author=[author],
@@ -71,7 +102,7 @@ def newBook():
 
 
 @app.route('/category/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def category():
 	form = CategoryForm(formdata=request.form or None)
 	if request.method == 'POST':
@@ -90,7 +121,7 @@ def category():
 
 
 @app.route('/author/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def author():
 	form = AuthorForm(formdata=request.form or None)
 	if request.method == 'POST':
@@ -109,7 +140,7 @@ def author():
 
 
 @app.route('/publisher/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def publisher():
 	form = PublisherForm(formdata=request.form or None)
 	if request.method == 'POST':

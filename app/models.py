@@ -1,7 +1,36 @@
 from app import db
 import datetime
 
+class Author(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(180), unique=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
 
+    def __init__(self, name):
+        self.name = name
+
+    def __unicode__(self):
+        return self.name
+
+    def __repr__(self):
+        return '<Author %r>' % self.name
+
+class Publisher(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(180), unique=True)
+    address = db.Column(db.Text)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
+
+    def __init__(self, name, address):
+        self.name = name
+        self.address = address
+
+    def __unicode__(self):
+        return self.name
+
+    def __repr__(self):
+        return '<Publisher %r>' % self.name
+        
 categories = db.Table('categories',
     db.Column('category_id', db.Integer, db.ForeignKey('category.id')),
     db.Column('book_id', db.Integer, db.ForeignKey('book.id'))
@@ -72,35 +101,3 @@ class Book(db.Model):
             'isActive': self.isActive,
             'endDate': self.endDate.isoformat()
         }
-
-class Author(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(180), unique=True)
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
-
-    def __init__(self, name):
-        self.name = name
-
-    def __unicode__(self):
-        return self.name
-
-    def __repr__(self):
-        return '<Author %r>' % self.name
-
-class Publisher(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(180), unique=True)
-    address = db.Column(db.Text)
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
-
-    def __init__(self, name, address):
-        self.name = name
-        self.address = address
-
-    def __unicode__(self):
-        return self.name
-
-    def __repr__(self):
-        return '<Publisher %r>' % self.name
-
-

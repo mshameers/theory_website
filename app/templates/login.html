@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+{% block body %}
+<div class="row">
+	<form action="/login/" method="post">
+		<p>	
+			<div class="large-4 columns">
+				<label for="username">Username</label>
+				<input id="username" type="text" name="username">
+			</div>
+		</p>
+		<p>
+			<div class="large-4 columns">
+				<label for="password">Password</label>
+				<input id="password" type="password" name="password">
+			</div>
+		</p>
+		<br />
+		<p><input type="submit" value="Log in"></p>
+	</form>
+</div>
+{% endblock %}

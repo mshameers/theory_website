@@ -28,8 +28,7 @@
 				<li><a href="{{url_for('books')}}" class="button">Book List</a></li>
 				<li><a href="#" class="button">Gallery</a></li>
 				<li><a href="#" class="button">Contact</a></li>
-				{#{% if session.logged_in %}
-			    	<li><a href="{{ url_for('logout') }}"> Logout </a></li>#}
+			    {% if session.logged_in %}
 			    	<li><a href="#" class="button" data-dropdown="hover1" data-options="is_hover:true">Admin</a></li>
 			    		<ul id="hover1" class="f-dropdown" data-dropdown-content>
 			    			<li><a href="{{url_for('newBook')}}">Add Book</a></li>
@@ -37,7 +36,7 @@
 			    			<li><a href="{{url_for('author')}}">Author</a></li>
 			    			<li><a href="{{url_for('publisher')}}">Publisher</a></li>
 			    		</ul>
-			    {#{% endif %}#}
+			    {% endif %}
 				</ul>
 			</div>
 		</div>
@@ -99,7 +98,11 @@
 	        </div>
 	        <div class="large-6 columns">
 	          <ul class="inline-list right">
-	            <li><a href="#">Login</a></li>
+	          	{% if session.logged_in %}
+			    	<li><a href="{{ url_for('logout') }}"> Logout </a></li>
+			    {% else %}
+			    	<li><a href="{{ url_for('login') }}"> Login </a></li>
+			    {% endif %}
 	          </ul>
 	        </div>
 	      </div>

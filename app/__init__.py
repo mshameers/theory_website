@@ -79,7 +79,7 @@ def markdown(value):
     extras = ['fenced-code-blocks', 'wiki-tables']
     return Markup(md2(value, extras=extras))
 
-from flask import session, request
+# from flask import session, request
 
 # @app.before_request
 # def csrf_protect():
@@ -104,8 +104,7 @@ app.jinja_env.filters['pluralize'] = pluralize
 app.jinja_env.filters['month_name'] = month_name
 app.jinja_env.filters['markdown'] = markdown
 
-from app import views
-db.create_all()
+from app import models, views
 
 
 # from app.models import User
